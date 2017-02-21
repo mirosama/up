@@ -1,0 +1,46 @@
+We have made a JSON storage server in Node.JS with a OpenMCT plugin talking to that server for persisting the objects/infrastructure/etc.
+
+
+## Step 1
+You have to extract the net-persistence-server tar.xz archive separately and run it via npm start on the same machine where OpenMCT runs.
+
+```
+npm start
+```
+
+## Step 2
+For net-persistence tar.xz archive, you have to extract the files inside a folder named "net-persistence", and this folder should be inside the OpenMCT folder. 
+
+
+## Setp 3
+Then you have to edit index.html of OpenMCT, remove the line "platform/persistence/local", and add my OpenMCT bundle inside this file.
+
+To give a clue how index.html script tag should look:
+
+```
+
+<script>
+require(['openmct', 'net-persistence/bundle'], function (openmct) {
+[
+'example/imagery',
+'example/eventGenerator',
+'example/generator',
+'net-persistence',
+'platform/features/my-items',
+// 'platform/persistence/local'
+].forEach(
+openmct.legacyRegistry.enable.bind(openmct.legacyRegistry)
+);
+openmct.start();
+});
+</script>
+
+```
+
+
+
+
+Little notes: I do not know how it scales up with concurrent users. OpenMCT may override parts of the data in case of conflicts since it does not think it is especially shared. But I don't think doing a conflict resolution is needed without evidence there is a problem with that.
+
+
+
